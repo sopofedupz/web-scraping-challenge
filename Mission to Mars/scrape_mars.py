@@ -27,7 +27,7 @@ def scrape():
     url = "https://mars.nasa.gov/news/"
     browser.visit(url)
 
-    time.sleep(2)
+    time.sleep(1)
 
     # Create a Beautiful Soup object
     html = browser.html
@@ -91,17 +91,18 @@ def scrape():
 
     # Looping through all the tweets and appending only those tweeted by Mars Weather user
     if all_tweets:
-    for tweet in all_tweets:
-        content = tweet.find('div',{'class':'content'})
-        header = content.find('div',{'class':'stream-item-header'})
-        user = header.find('a',{'class':'account-group js-account-group js-action-profile js-user-profile-link js-nav'}).text.replace("\n"," ").strip()
-        message = content.find('div',{'class':'js-tweet-text-container'}).text.replace("\n"," ").strip()
-        
-        if user == "Mars Weather\u200f\xa0@MarsWxReport":
-            tweet_list.append(message)
-        
-    else:
-        print("List is empty/account name not found.")
+    
+        for tweet in all_tweets:
+            content = tweet.find('div',{'class':'content'})
+            header = content.find('div',{'class':'stream-item-header'})
+            user = header.find('a',{'class':'account-group js-account-group js-action-profile js-user-profile-link js-nav'}).text.replace("\n"," ").strip()
+            message = content.find('div',{'class':'js-tweet-text-container'}).text.replace("\n"," ").strip()
+            
+            if user == "Mars Weather\u200f\xa0@MarsWxReport":
+                tweet_list.append(message)
+            
+        else:
+            print("List is empty/account name not found.")
         
     # Selecting the latest tweet
     mars_weather = tweet_list[1]
@@ -116,11 +117,11 @@ def scrape():
     tables = pd.read_html(mars_facts_url)
 
     # Selecting the table and putting into a dataframe
-    mars_facts_df = tables[0]
+    mars_facts_df = tables[1]
     mars_facts_df.columns = ["Planetary Attributes", "Values"]
 
     # Convert data in table to html
-    mars_facts_html = mars_facts_df.to_html("mars_facts.html", index=False, header=False)
+    mars_facts_html = mars_facts_df.to_html(index=False, header=False)
 
     # adding scraped table to dict
     mars_data['mars_facts_table'] = mars_facts_html
@@ -172,4 +173,3 @@ def scrape():
     browser.quit()
 
     return mars_data
-
