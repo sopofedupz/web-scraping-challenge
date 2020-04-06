@@ -15,7 +15,7 @@ import json
 def init_browser():
     """Set executable path and initialize Chrome browser"""
     executable_path = {"executable_path": "chromedriver.exe"}
-    return Browser("chrome", **executable_path)
+    return Browser("chrome", **executable_path, headless = True)
 
 def scrape():
     """Scrapes various websites for information and returns data in a dictionary"""
