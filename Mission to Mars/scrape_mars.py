@@ -117,8 +117,12 @@ def scrape():
     tables = pd.read_html(mars_facts_url)
 
     # Selecting the table and putting into a dataframe
-    mars_facts_df = tables[1]
-    mars_facts_df.columns = ["Planetary Attributes", "Values"]
+    try:
+        mars_facts_df = tables[0]
+        mars_facts_df.columns = ["Planetary Attributes", "Values"]
+    except:
+        mars_facts_df = tables[1]
+        mars_facts_df.columns = ["Planetary Attributes", "Values"]
 
     # Convert data in table to html
     mars_facts_html = mars_facts_df.to_html(index=False, header=False)
